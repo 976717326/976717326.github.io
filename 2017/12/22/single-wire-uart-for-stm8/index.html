@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。 123st=&amp;gt;operation: Ae=&amp;gt;operation: Bst(right)-&amp;gt;e  半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某">
+<meta name="description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。   半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某一个方向的传输（A-&amp;gt;B或者B-&amp;gt;A这两个方向取其一），称为半双工通讯。   全双工通讯：如果在任">
 <meta name="keywords" content="原创,stm8,单线半双工">
 <meta property="og:type" content="article">
 <meta property="og:title" content="stm8单线半双工使用">
 <meta property="og:url" content="http://rhheng.com/2017/12/22/single-wire-uart-for-stm8/index.html">
 <meta property="og:site_name" content="Rhh&#39;s Blog">
-<meta property="og:description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。 123st=&amp;gt;operation: Ae=&amp;gt;operation: Bst(right)-&amp;gt;e  半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某">
+<meta property="og:description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。   半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某一个方向的传输（A-&amp;gt;B或者B-&amp;gt;A这两个方向取其一），称为半双工通讯。   全双工通讯：如果在任">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p1cbt7kgf.bkt.clouddn.com/images/uart1-single-wire.png?imageView2/2/w/600">
 <meta property="og:image" content="http://p1cbt7kgf.bkt.clouddn.com/images/single-wire-dscript.png?imageView2/2/w/600">
@@ -93,7 +93,7 @@
 <meta property="og:updated_time" content="2017-12-23T11:03:29.833Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="stm8单线半双工使用">
-<meta name="twitter:description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。 123st=&amp;gt;operation: Ae=&amp;gt;operation: Bst(right)-&amp;gt;e  半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某">
+<meta name="twitter:description" content="单线半双工是什么基本概念一般来说，按照信息的传输方向，串行通讯方式可以分为：  单工通讯： 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。   半双工通讯：如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某一个方向的传输（A-&amp;gt;B或者B-&amp;gt;A这两个方向取其一），称为半双工通讯。   全双工通讯：如果在任">
 <meta name="twitter:image" content="http://p1cbt7kgf.bkt.clouddn.com/images/uart1-single-wire.png?imageView2/2/w/600">
 
 
@@ -370,13 +370,14 @@
         <h2 id="单线半双工是什么"><a href="#单线半双工是什么" class="headerlink" title="单线半双工是什么"></a>单线半双工是什么</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>一般来说，按照信息的传输方向，串行通讯方式可以分为：</p>
 <ul>
 <li><p><strong>单工通讯：</strong> 如果在通讯过程的任意时刻，信息只能由一方A传到另一方B，则称为单工通讯。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;operation: A</span><br><span class="line">e=&gt;operation: B</span><br><span class="line">st(right)-&gt;e</span><br></pre></td></tr></table></figure>
+<div id="flowchart-0" class="flow-chart"></div>
 </li>
 <li><p><strong>半双工通讯：</strong>如果在任意时刻，信息既可由一方A传到另一方B，也可由B传到A，但是存在限制条件：在任意时刻，通讯中只能存在某一个方向的传输（A-&gt;B或者B-&gt;A这两个方向取其一），称为半双工通讯。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A-&gt;B: 一次通讯</span><br><span class="line">B--&gt;A: 另一次通讯</span><br></pre></td></tr></table></figure>
+<div id="sequence-0"></div>
 </li>
 <li><p><strong>全双工通讯：</strong>如果在任意时刻，同时允许A到B和B到A的双向传输，则称为全双工通讯。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A-&gt;B: 双向同</span><br><span class="line">B-&gt;A: 时进行</span><br></pre></td></tr></table></figure>
+<div id="sequence-1"></div>
+
 </li>
 </ul>
 <a id="more"></a>
@@ -435,6 +436,11 @@
 <p>2.<strong>接收功能</strong><br>一般可以轮询接收标志或者开启接收中断，由于轮询的方式效率太低，所以往往不予采用。而中断的方式实时性好，处理也简单：在中断函数里面接收数据即可。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (UART1_GetFlagStatus(UART1_FLAG_RXNE) != RESET)</span><br><span class="line">&#123;</span><br><span class="line">        data_to_rec = UART1_ReceiveData8();</span><br><span class="line">        <span class="comment">/* 加入处理接收到的数据的代码 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意通过以下代码使能接收中断</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UART1_ITConfig (UART1_IT_RXNE_OR, ENABLE);</span><br></pre></td></tr></table></figure>
+<p><script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.27/webfontloader.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">A->B: 一次通讯
+B-->A: 另一次通讯</textarea><textarea id="sequence-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><textarea id="sequence-1-code" style="display: none">A->B: 双向同
+B->A: 时进行</textarea><textarea id="sequence-1-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-1-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-1", options);</script><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>operation: A
+e=>operation: B
+st(right)->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12,"theme":"simple"}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
 
       
     </div>
