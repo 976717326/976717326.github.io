@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="hexo,博客备份," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言很久以来都有一个想法，就是搭建属于自己的博客。网上也浏览了一些资料，发现现在线程的博客框架非常多，比如wordpress、hexo之类的。简单比对之后，选择了hexo框架，原因很简单：geek感十足，完全可以满足装逼的需要。">
+<meta name="keywords" content="hexo,博客备份">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在github上备份自己的博客">
+<meta property="og:url" content="http://rhheng.com/2017/12/24/back-up-your-hexo-blog-in-github/index.html">
+<meta property="og:site_name" content="Rhh&#39;s Blog">
+<meta property="og:description" content="前言很久以来都有一个想法，就是搭建属于自己的博客。网上也浏览了一些资料，发现现在线程的博客框架非常多，比如wordpress、hexo之类的。简单比对之后，选择了hexo框架，原因很简单：geek感十足，完全可以满足装逼的需要。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p1cbt7kgf.bkt.clouddn.com/images/qiniuyun-folder.png?imageView2/2/w/600">
+<meta property="og:updated_time" content="2017-12-24T11:45:07.135Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何在github上备份自己的博客">
+<meta name="twitter:description" content="前言很久以来都有一个想法，就是搭建属于自己的博客。网上也浏览了一些资料，发现现在线程的博客框架非常多，比如wordpress、hexo之类的。简单比对之后，选择了hexo框架，原因很简单：geek感十足，完全可以满足装逼的需要。">
+<meta name="twitter:image" content="http://p1cbt7kgf.bkt.clouddn.com/images/qiniuyun-folder.png?imageView2/2/w/600">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://rhheng.com/2017/12/24/back-up-your-hexo-blog-in-github/"/>
+
+
+
+
+
+  <title>如何在github上备份自己的博客 | Rhh's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rhh's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">专注于如何偷懒！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://rhheng.com/2017/12/24/back-up-your-hexo-blog-in-github/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="rhh">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rhh's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何在github上备份自己的博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T14:17:55+08:00">
+                2017-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/12/24/back-up-your-hexo-blog-in-github/" class="leancloud_visitors" data-flag-title="如何在github上备份自己的博客">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很久以来都有一个想法，就是搭建属于自己的博客。网上也浏览了一些资料，发现现在线程的博客框架非常多，比如<a href="https://cn.wordpress.org/" target="_blank" rel="noopener">wordpress</a>、<a href="https://hexo.io/" target="_blank" rel="noopener">hexo</a>之类的。简单比对之后，选择了hexo框架，原因很简单：geek感十足，完全可以满足装逼的需要。</p>
+<a id="more"></a>
+<h2 id="hexo博客搭建与部署"><a href="#hexo博客搭建与部署" class="headerlink" title="hexo博客搭建与部署"></a>hexo博客搭建与部署</h2><p>一般来说，大家都是利用hexo配合<a href="https://pages.github.com/" target="_blank" rel="noopener">github pages</a>来搭建博客的，为什么用github pages，原因很简单：github pages不收费！虽然github pages只能建立一个个人主页，但是足够使用了。关于博客的搭建过程，网上已经有数不清的教程，比如：</p>
+<ul>
+<li><a href="https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/" target="_blank" rel="noopener">手把手教你使用Hexo + Github Pages搭建个人独立博客</a></li>
+<li><a href="http://www.youmeek.com/hexo-install/" target="_blank" rel="noopener">使用 Github 空间搭建 Hexo 博客 1–安装篇（基于 IntelliJ IDEA）</a></li>
+<li><a href="http://www.lovebxm.com/2017/05/30/buildBlog/" target="_blank" rel="noopener">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></li>
+</ul>
+<p>博客搭建完成之后，就是自己写文章，然后发布就行了，无非就是几条命令：</p>
+<ul>
+<li>写文章：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">"post_title"</span>	<span class="comment"># post_title就是新文章的链接标题</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>文章生成：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g	<span class="comment"># 连接符&amp;&amp;可以用来顺序执行连续的命令</span></span><br></pre></td></tr></table></figure>
+<p>如果需要现在本地预览文章效果的话，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<p>打开浏览器，地址栏输入<code>localhost:4000</code>就可以预览文章最终的效果，如果觉得预览没有问题，就可以进行最终的部署。</p>
+<ul>
+<li>最终部署：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d	<span class="comment"># d是deploy的缩写</span></span><br></pre></td></tr></table></figure>
+<p>最终部署会将文件推送到github的仓库里，过几分钟访问<code>&lt;github_username&gt;.github.io</code>就可以看到实际的效果。同时网友也可以通过该网址浏览自己的blog了。</p>
+<h2 id="博客备份"><a href="#博客备份" class="headerlink" title="博客备份"></a>博客备份</h2><p>搭建好hexo博客之后，就已尽情地编写自己博客了。但是我突然意识到一个问题，hexo博客框架本身是一个静态的站点生成器，需要依托于本地的资源才能完成部署。那么问题来了：如果自己不小心把本地的文章删除了，接着还执行了<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code>命令，那就很刺激了。如果回收站没有清空的话，还是可以抢救一下的，但是如果回收站清空了，GG！</p>
+<p>相信很多人都遇到这个问题了，所以我去google了一下，还真发现了解决方案，用来部署博客的插件<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="noopener">hexo-deployer-git</a>的最新版集成了推送本地资源到远程仓库的功能。使用方法也很简单。</p>
+<ul>
+<li>安装最新版的插件：.</li>
+</ul>
+<p>对应npm版本低于4的，用以下命令来安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install git+git@github.com:hexojs/hexo-deployer-git.git --save</span><br></pre></td></tr></table></figure>
+<p>对应npm版本为5的，用以下命令来安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install git+ssh://git@github.com:hexojs/hexo-deployer-git.git --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改根目录下的配置文件<code>_config.yml</code>：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  - type: git</span><br><span class="line">    repo: git@github.com:github_username/github_username.github.io.git</span><br><span class="line">    branch: master</span><br><span class="line">  - type: git</span><br><span class="line">    repo: git@github.com:github_username/github_username.github.io.git</span><br><span class="line">    branch: src</span><br><span class="line">    extend_dirs: /</span><br><span class="line">    ignore_hidden: false</span><br><span class="line">    ignore_pattern:</span><br><span class="line">       public: .</span><br></pre></td></tr></table></figure>
+<p>这样，github的远程仓库就存在两个分支：</p>
+<ul>
+<li><code>master</code>：用来存储构建网站所需要的资源</li>
+<li><code>src</code>：用来存储本地资源</li>
+</ul>
+<p>经过以上操作，这时使用<code>hexo d</code>命令，就会自动完成对<code>master</code>分支和<code>src</code>分支的更新。</p>
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><p>然而这个方案依然存在明显的问题：</p>
+<ul>
+<li><strong>一些私密的<code>id</code>和<code>token</code>可能会被公布到网上，存在安全隐患。在主题配置文件<code>_config.yml</code>中，可能存在一些用户的隐私数据，比如<code>livere_uid</code>和<code>leancloud_visitors</code>的相关信息。</strong></li>
+</ul>
+<p>解决方案就是放弃<code>hexo-deployer-git</code>插件提供的自动备份功能，自己搭建一个私密仓库，专门用来备份自己的本地资源。然而我太懒了，不想再折腾了。我只想安静写个博客。。。然而。。就在我不想折腾的时候，又发现了一个问题：</p>
+<ul>
+<li><strong>七牛云的本地资源也被备份了！</strong></li>
+</ul>
+<img title="七牛云资源文件夹" src="http://p1cbt7kgf.bkt.clouddn.com/images/qiniuyun-folder.png?imageView2/2/w/600">
+<p>我使用七牛云插件的本意就是不让远程仓库保留<code>cdn</code>文件夹内的所有资源，让<code>cdn</code>文件夹内的资源都保存在七牛云的云端，从而节省github的空间。备份<code>cdn</code>文件夹完全违背了我的本意。。不能忍。。。</p>
+<p>注意到根目录下的<code>_config.yml</code>文件的配置，我猜测可以添加一个选项来完成<code>cdn</code>文件夹的忽略：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  - <span class="built_in">type</span>: git</span><br><span class="line">    repo: git@github.com:github_username/github_username.github.io.git</span><br><span class="line">    branch: master</span><br><span class="line">  - <span class="built_in">type</span>: git</span><br><span class="line">    repo: git@github.com:github_username/github_username.github.io.git</span><br><span class="line">    branch: src</span><br><span class="line">    extend_dirs: /</span><br><span class="line">    ignore_hidden: <span class="literal">false</span></span><br><span class="line">    ignore_pattern:</span><br><span class="line">        public: .</span><br><span class="line">        cdn: .		<span class="comment"># &lt;-这里添加了cdn文件夹</span></span><br></pre></td></tr></table></figure>
+<p>事实证明，该设置没有任何作用。。厚着脸皮去请教了别人，终于得到了解答：</p>
+<ul>
+<li><strong>修改根目录内的<code>.gitignore</code>文件即可</strong></li>
+</ul>
+<p>编辑<code>.gitignore</code>文件，在<code>.gitignore</code>文件的最后一行追加自己需要隐藏的目录或者文件：我这里设置了忽略<code>cdn</code>文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.<span class="built_in">log</span></span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line"><span class="comment">#追加cdn文件夹↓</span></span><br><span class="line">cdn/</span><br></pre></td></tr></table></figure>
+<p>这样，每次推送的时候就不会把<code>cdn</code>文件夹也推送到远程仓库了，大功告成！</p>
+<h2 id="后续工作"><a href="#后续工作" class="headerlink" title="后续工作"></a>后续工作</h2><p>写到这里，基本可以满足我写博客的需求了。然而，一个人懒起来是很恐怖的。。为什么每次都要自己使用<code>hexo deploy</code>命令部署，不能自动化完成吗？</p>
+<p>网上已经有现成的解决方案了：github+ <a href="https://travis-ci.org/" target="_blank" rel="noopener">Travis CI</a> 完成自动部署！相关教程也有还能多，google一下就有一堆博文详细介绍整个自动化部署流程。完成这个流程的意义就是：只需要一个命令就可以完成所有工作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin src	<span class="comment"># src就是存放本地资源的分支</span></span><br></pre></td></tr></table></figure>
+<p>我也去尝试了一下，结果失败了。意料之中。。</p>
+<p>另外由于我使用了七牛云，并且我将<code>cdn</code>文件忽略了，所以就算部署成功了，博文里面链接到七牛云的资源应该也会有问题。。除非我把<code>cdn</code>文件也一同上传，才有可能链接成功。（以上纯属猜测）</p>
+<p>总结下来就一句话：生命不息。。折腾不止。。有空继续。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>谢谢您的糖果！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="rhh 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="rhh 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    rhh
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://rhheng.com/2017/12/24/back-up-your-hexo-blog-in-github/" title="如何在github上备份自己的博客">http://rhheng.com/2017/12/24/back-up-your-hexo-blog-in-github/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="external nofollow" target="_blank">CC BY-NC-ND 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+            <a href="/tags/博客备份/" rel="tag"># 博客备份</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/22/single-wire-uart-for-stm8/" rel="next" title="stm8单线半双工使用">
+                <i class="fa fa-chevron-left"></i> stm8单线半双工使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjYxOC85MTc5"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="rhh" />
+            
+              <p class="site-author-name" itemprop="name">rhh</p>
+              <p class="site-description motion-element" itemprop="description">一个人不偷懒和咸鱼有什么两样？</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/976717326" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ruanhuiheng@sina.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/ruanhuiheng" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hexo博客搭建与部署"><span class="nav-number">2.</span> <span class="nav-text">hexo博客搭建与部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#博客备份"><span class="nav-number">3.</span> <span class="nav-text">博客备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他问题"><span class="nav-number">4.</span> <span class="nav-text">其他问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后续工作"><span class="nav-number">5.</span> <span class="nav-text">后续工作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">rhh</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OXizjHrG9kEdXGMRu8hdFKR2-gzGzoHsz", "CkmUYt5HVHBKhbnuejzkCBaL");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
