@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.4.4"
+    "version": "3.6.0"
   },
   "dependencies": {
-    "hexo": "^3.2.0",
+    "hexo": "^3.6.0",
     "hexo-deployer-git": "git+ssh://git@github.com/hexojs/hexo-deployer-git.git",
     "hexo-filter-flowchart": "^1.0.4",
     "hexo-filter-sequence": "^1.0.3",

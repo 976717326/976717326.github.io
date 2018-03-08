@@ -8,7 +8,7 @@ subtitle: 专注于如何偷懒！
 description: 一个人不偷懒和咸鱼有什么两样？
 email: ruanhuiheng@sina.com
 author: rhh
-language: zh-Hans
+language: zh-CN
 timezone:
 
 # URL
@@ -137,3 +137,8 @@ flowchart:
   # raphael:   # optional, the source url of raphael.js
   # flowchart: # optional, the source url of flowchart.js
   options: # options used for `drawSVG`
+
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
