@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="L0Ugct52kKjHMa8pOYzxdQZ5lpmfa8ozm_WUKTM0yKc" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.5" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.5">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.5">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.5">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.5" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.0.5',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="HEX," />
+
+
+<meta name="description" content="本文主要参考翻译了 Kanda Electronics Blog 中的博文，如有错误请指正。  一般来说，典型的可下载文件格式有：bin、hex、elf等。bin是纯二进制的文件，而hex是ASCII编码的文本文件。hex文件是可阅读的，固定的格式使其更容易让人理解。Hex的标准格式率先由Intel提出，现已被各公司扩展成了不同的格式标准，但是其基本格式保持不变，下面对其进行分析。">
+<meta name="keywords" content="HEX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Intel Hex 文件格式解析">
+<meta property="og:url" content="http://rhheng.com/2018/02/26/intel-hex-files-explained/index.html">
+<meta property="og:site_name" content="Rhh&#39;s Blog">
+<meta property="og:description" content="本文主要参考翻译了 Kanda Electronics Blog 中的博文，如有错误请指正。  一般来说，典型的可下载文件格式有：bin、hex、elf等。bin是纯二进制的文件，而hex是ASCII编码的文本文件。hex文件是可阅读的，固定的格式使其更容易让人理解。Hex的标准格式率先由Intel提出，现已被各公司扩展成了不同的格式标准，但是其基本格式保持不变，下面对其进行分析。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-13T10:16:21.680Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Intel Hex 文件格式解析">
+<meta name="twitter:description" content="本文主要参考翻译了 Kanda Electronics Blog 中的博文，如有错误请指正。  一般来说，典型的可下载文件格式有：bin、hex、elf等。bin是纯二进制的文件，而hex是ASCII编码的文本文件。hex文件是可阅读的，固定的格式使其更容易让人理解。Hex的标准格式率先由Intel提出，现已被各公司扩展成了不同的格式标准，但是其基本格式保持不变，下面对其进行分析。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://rhheng.com/2018/02/26/intel-hex-files-explained/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Intel Hex 文件格式解析 | Rhh's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rhh's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">专注于如何偷懒！</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://rhheng.com/2018/02/26/intel-hex-files-explained/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="rhh">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rhh's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Intel Hex 文件格式解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T16:52:19+08:00">2018-02-26</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/嵌入式/" itemprop="url" rel="index"><span itemprop="name">嵌入式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/26/intel-hex-files-explained/" class="leancloud_visitors" data-flag-title="Intel Hex 文件格式解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文主要<del>参考</del>翻译了 <a href="https://www.kanda.com/blog/" target="_blank" rel="noopener">Kanda Electronics Blog</a> 中的<a href="https://www.kanda.com/blog/microcontrollers/intel-hex-files-explained/" target="_blank" rel="noopener">博文</a>，如有错误请指正。</p>
+</blockquote>
+<p>一般来说，典型的可下载文件格式有：bin、hex、elf等。bin是纯二进制的文件，而hex是ASCII编码的文本文件。hex文件是可阅读的，固定的格式使其更容易让人理解。Hex的标准格式率先由Intel提出，现已被各公司扩展成了不同的格式标准，但是其基本格式保持不变，下面对其进行分析。</p>
+<a id="more"></a>
+<h3 id="Intel-Hex-文件格"><a href="#Intel-Hex-文件格" class="headerlink" title="Intel Hex 文件格"></a>Intel Hex 文件格</h3><p>Hex文件内，每一行记录的格式都是固定的，格式如下：</p>
+<p><code>:BBAAAATT[DDDDDDDD]CC</code></p>
+<p>其中：</p>
+<p><strong><code>:</code></strong>是该行记录的起始标识符（Start Code）</p>
+<p><strong><code>BB</code></strong>是该行记录的数据字节数（Byte Count）（即DDDDDDDD代表的字节数）</p>
+<p><strong><code>AAAA</code></strong>是该行记录指定的地址（Address）</p>
+<p><strong><code>TT</code></strong>是该行记录的记录类型（Record Type）</p>
+<p><strong><code>DD</code></strong>是该行记录的数据字节（Data），字节数由<strong>BB</strong>域确定，数据域是可选的，由记录类型确定</p>
+<p><strong><code>CC</code></strong>是该行记录的校验和（Checksum）</p>
+<p><strong>例1</strong>：</p>
+<p><strong><code>:</code> <code>10</code>  <code>0000</code> <code>00</code> <code>112233445566778899AABBCCDDEEFF00</code> <code>F8</code></strong></p>
+<p>该行记录的起始标识符为冒号（:），数据字节数为16个（即<strong>0x10</strong>），数据起始地址为0x0000，记录类型为00，数据域为0x112233445566778899AABBCCDDEEFF00，总计16个字节，该行校验和为0xF8。</p>
+<p>可以看出，<strong>在文本内，每2个字符代表一个字节</strong>，比如校验和F8代表的是hex形式的0xF8。</p>
+<blockquote>
+<p>为了方便理解和阅读，本文例子在各个域之间插入了空格，实际hex文件中并不会出现这些空格。</p>
+</blockquote>
+<p><strong>例2</strong>：</p>
+<p><strong><code>:</code> <code>04</code> <code>0010</code> <code>00</code> <code>11223344</code> <code>42</code></strong></p>
+<p>该行表示有4个字节的数据，数据起始地址为0x0010，数据内容为0x1122344，校验和为0x42。</p>
+<p>通过这两个例子，再次详细讨论这些域的作用：</p>
+<h3 id="起始标识符"><a href="#起始标识符" class="headerlink" title="起始标识符"></a>起始标识符</h3><p>即<code>:</code>域，该字符标志着每一行记录的开始。在hex文件中，任意一行记录都必须以冒号作为开头。</p>
+<h3 id="字节数"><a href="#字节数" class="headerlink" title="字节数"></a>字节数</h3><p>即<strong><code>BB</code></strong>域，指定了数据域的数据长度。</p>
+<p>取值范围为0x00~0xFF，这就意味着，每一行的数据域最大字节数为255个，最少的情况则为0个，也就是说数据域不是必须的。一般来说，在内存允许连续存储，并且剩余的需要连续存储的数据不少于16个字节的话，该域会被设置成0x10（即每条记录存储16个字节），当然，这不是强制性的，但是大多数编译器都会这么做。</p>
+<h3 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h3><p>即<strong><code>AAAA</code></strong>域，指定了数据域的起始地址。</p>
+<p>取值范围为0x0000~0xFFFF，这就意味着，数据存储容量为64K。显然，如果程序容量被限制到64K是不合理的，所以需要对地址进行扩展，扩展的方法由<strong>记录类型</strong>决定，具体方法见下文。</p>
+<p>需要注意的是，在<strong>记录类型</strong>为00时，地址域才有实际的意义。因为此时数据域的内容才真正代表需要写入到内存中的数据。值得注意的是，实际的hex文件中的记录，地址域可能不会按照一定的增长顺序来排列，实际的地址顺序可能是错乱的，但是这并不会影响hex文件的解析和下载。除00以外，其他记录类型均不会向内存写入数据。</p>
+<h3 id="记录类型"><a href="#记录类型" class="headerlink" title="记录类型"></a>记录类型</h3><p>即<strong><code>TT</code></strong>域，指定了该行的记录类型。</p>
+<p>取值范围为00~05。</p>
+<ul>
+<li><strong><code>00</code></strong>：该行记录为数据（Data）。数据域的内容需要从地址域指定的起始地址开始写入。</li>
+<li><strong><code>01</code></strong>：该行记录为文件终止标识（End of File）。Hex文件结束标志。任何一个hex文件最后一行都是固定的：<code>:00000001FF</code>。此时该记录不存在数据域。</li>
+</ul>
+<ul>
+<li><p><strong><code>02</code></strong>：该行记录为扩展段地址（Extended Segment Address）。当需要写入数据的地址超过64K时，如果使用<strong>00</strong>类型的记录是无法满足要求的。这时候需要对地址进行扩展。</p>
+<p><strong>例3：</strong></p>
+<p><strong><code>:</code> <code>02</code> <code>0000</code> <code>02</code> <code>1000</code> <code>FD</code></strong></p>
+<p>该记录<strong>地址域</strong>是被忽略的，一般地址域会被设置成<strong>0000</strong>，记录类型<strong>02</strong>后续的2个字节左移<strong>4</strong>位后成为后续数据记录的偏移地址。即0x1000左移4位后变成0x10000。如果该记录之后再出现和<strong>例1</strong>中一样的记录，则实际写入数据的起始地址为：0x10000，而非0x0000。该偏移地址对所有后续的数据记录有效，指导有其他设置偏移地址的记录出现。</p>
+<p>显然，<strong>记录类型02</strong>将地址扩展到了64K*16=1024K=1M。</p>
+</li>
+<li><p><strong><code>03</code></strong>：该行记录为起始段地址（Start Segment Address）。（待完善。。。）</p>
+</li>
+<li><p><strong><code>04</code></strong>：该行记录为扩展线性地址（Extended Linear Address）。当需要写入数据的地址超过64K时，还有一种扩展地址的方法，先看以下例子。</p>
+<p><strong>例4：</strong></p>
+<p><strong><code>:</code> <code>02</code> <code>0000</code> <code>04</code> <code>0001</code> <code>F9</code></strong></p>
+<p>该记录<strong>地址域</strong>也是被忽略的，一般地址域会被设置成<strong>0000</strong>，记录类型<strong>04</strong>后续的2个字节左移<strong>16</strong>位后成为后续数据记录的偏移地址。即0x0001左移16位后变成0x10000。如果该记录之后再出现和<strong>例1</strong>中一样的记录，则实际写入数据的起始地址为：0x10000，而非0x0000。该偏移地址对所有后续的数据记录有效，指导有其他设置偏移地址的记录出现。</p>
+<p>显然，<strong>记录类型04</strong>将地址扩展到了64K*2^16=4096M=4G。</p>
+</li>
+<li><p><strong><code>05</code></strong>：该行记录为起始线性地址（Start Linear Address）。（待完善。。。）</p>
+</li>
+</ul>
+<h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><p>即<strong><code>DD</code></strong>域，指定了该行记录的数据内容（如果存在数据域的话）。</p>
+<p>数据的字节数由<strong>字节数</strong>域确定，数据域的内容可能是需要写入到内存中的数据（记录类型为00时），也可能是需要设置的偏移地址（记录类型为02或者04时），如果记录类型为01时，则数据数据域不存在。</p>
+<h3 id="校验和"><a href="#校验和" class="headerlink" title="校验和"></a>校验和</h3><p>即<strong><code>CC</code></strong>域，指定了该行记录的校验和。</p>
+<p>校验方法为：将字节数域到数据域之间的字节数据相加，取相加结果的最低字节（LSB， least significant byte），该字节的补码即为最终的校验和。每一行记录都必须以校验和作为结束。再次回到<strong>例2</strong>，该记录的校验和为0x42，计算过程为：</p>
+<p>0x04 + 0x00 + 0x10 + 0x11 + 0x22 + 0x33 +0x44 = 0xBE</p>
+<p>0xBE的二进制码为：10111110h</p>
+<p>转化为补码：10111110h[原码]→01000001h[反码]→01000010[补码]→0x42</p>
+<p>最终得到校验和为0x42.</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>hex文件内，每一行记录格式都是相同的，以冒号（:）开始，随后按照<strong>字节数</strong>、<strong>地址</strong>、<strong>记录类型</strong>、<strong>数据</strong>以及<strong>校验和</strong>的顺序来存储。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>谢谢您的支持！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="rhh 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="rhh 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>rhh</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://rhheng.com/2018/02/26/intel-hex-files-explained/" title="Intel Hex 文件格式解析">http://rhheng.com/2018/02/26/intel-hex-files-explained/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 CC BY-NC-ND 4.0 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HEX/" rel="tag"># HEX</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/something-about-2017/" rel="next" title="2017年终杂谈">
+                <i class="fa fa-chevron-left"></i> 2017年终杂谈
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/20/learning-git/" rel="prev" title="Git 实战">
+                Git 实战 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMjYxOC85MTc5"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="rhh" />
+            
+              <p class="site-author-name" itemprop="name">rhh</p>
+              <p class="site-description motion-element" itemprop="description">一个人不偷懒和咸鱼有什么两样？</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/976717326" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ruanhuiheng@sina.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/ruanhuiheng" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Intel-Hex-文件格"><span class="nav-number">1.</span> <span class="nav-text">Intel Hex 文件格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#起始标识符"><span class="nav-number">2.</span> <span class="nav-text">起始标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节数"><span class="nav-number">3.</span> <span class="nav-text">字节数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#地址"><span class="nav-number">4.</span> <span class="nav-text">地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记录类型"><span class="nav-number">5.</span> <span class="nav-text">记录类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据"><span class="nav-number">6.</span> <span class="nav-text">数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#校验和"><span class="nav-number">7.</span> <span class="nav-text">校验和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">8.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">rhh</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.0.5</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.5"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.5"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.0.5"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.0.5"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.5"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.5"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OXizjHrG9kEdXGMRu8hdFKR2-gzGzoHsz", "CkmUYt5HVHBKhbnuejzkCBaL");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
